@@ -1,4 +1,4 @@
-module github.com/MarcosStanquini/simple_bank
+module github.com/MarcosStanquini/go-simple-bank
 
 go 1.23.5
 
