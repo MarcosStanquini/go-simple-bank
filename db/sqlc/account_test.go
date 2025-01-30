@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func creatRandomAccount(t *testing.T) Account {
+func createRandomAccount(t *testing.T) Account {
 	// Struct para representar os parâmetros de entrada
 	arg := CreateAccountParams{
 		Owner:    util.RandomOwner(),
@@ -37,12 +37,12 @@ func creatRandomAccount(t *testing.T) Account {
 // Utilizamos o parametro para gerenciar o  Estado do teste(é um objeto)
 // TestCreateAccount testa a criação de uma conta
 func TestCreateAccount(t *testing.T) {
-	creatRandomAccount(t)
+	createRandomAccount(t)
 
 }
 
 func TestGetAccount(t *testing.T) {
-	account1 := creatRandomAccount(t)
+	account1 := createRandomAccount(t)
 	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, account2)
@@ -55,12 +55,11 @@ func TestGetAccount(t *testing.T) {
 
 }
 
-
-func TestUpdateAccount(t *testing.T){
-	account1 := creatRandomAccount(t)
+func TestUpdateAccount(t *testing.T) {
+	account1 := createRandomAccount(t)
 
 	arg := UpdateAccountParams{
-		ID: account1.ID,
+		ID:      account1.ID,
 		Balance: util.RandomMoney(),
 	}
 
@@ -76,26 +75,24 @@ func TestUpdateAccount(t *testing.T){
 
 }
 
-func TestDeleteAccount(t *testing.T){
-	account1 := creatRandomAccount(t)
+func TestDeleteAccount(t *testing.T) {
+	account1 := createRandomAccount(t)
 	err := testQueries.DeleteAccount(context.Background(), account1.ID)
 	require.NoError(t, err)
 	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, account2)
-
-
 }
 
-func TestListAccount(t *testing.T){
-	for i:=0; i < 10; i++{
-		creatRandomAccount(t)
+func TestListAccount(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		createRandomAccount(t)
 	}
 
 	arg := ListAccountsParams{
-		 Limit: 5,
-		 Offset: 5,
+		Limit:  5,
+		Offset: 5,
 	}
 
 	accounts, err := testQueries.ListAccounts(context.Background(), arg)
@@ -103,14 +100,8 @@ func TestListAccount(t *testing.T){
 	require.Len(t, accounts, 5)
 
 	//To omitindo um valor(i provavelmente, ou seja um blank identifier), passando o identificador para iterar sobre cada conta no range(tamanho da lista de contas que eu criei anteriormente)
-	for _, account := range accounts{
+	for _, account := range accounts {
 		require.NotEmpty(t, account)
 	}
 
-
 }
-
-
-
-	 
-
